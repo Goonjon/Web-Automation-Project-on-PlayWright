@@ -1,0 +1,30 @@
+name: Automation Workflow
+
+on:
+  # Commented out the cron to prevent automatic runs, it is for future use
+  # schedule:
+  #   - cron: '0 0 * * 1'  # Run every Monday at 12:00 AM UTC
+
+  # This allows you to trigger the workflow manually
+  workflow_dispatch:  # Manually trigger the workflow anytime you want
+
+jobs:
+  run-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run Playwright tests
+        run: npx playwright test
+
+      - name: Generate Allure Report
+        run: allure generate allure-results --clean
